@@ -22,13 +22,27 @@ ngOnInit():void{
 
     },
     {
-      id: 0,
+      id: 1,
       title:'papa',
       price:7,
       quantity:3,
       completed:true,
 
     },
+    {
+      id: 2,
+      title:'durazno',
+      price:5,
+      quantity:6,
+      completed:false,
+
+    },
   ]
 }
+
+deleteItem(item:Item){
+  
+  this.items=this.items.filter(x=>x.id!=item.id);
+}
+
 }
