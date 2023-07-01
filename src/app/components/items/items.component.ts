@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Item } from 'src/app/models/item';
+import { ItemService } from 'src/app/services/item.service';
 
 @Component({
   selector: 'app-items',
@@ -9,40 +10,32 @@ import { Item } from 'src/app/models/item';
 })
 export class ItemsComponent{
 
-items:Item[]=[];
+  items:Item[]=[];
+  total:number=0;
 
-ngOnInit():void{
-  this.items=[
-    {
-      id: 0,
-      title:'manzana',
-      price:10.5,
-      quantity:4,
-      completed:false,
+  constructor(private itemService:ItemService){}
 
-    },
-    {
-      id: 1,
-      title:'papa',
-      price:7,
-      quantity:3,
-      completed:true,
+  ngOnInit():void{
+    // this.items=[];
+    this.items=this.itemService.getItems();
+    this.getTotal();
+  }
 
-    },
-    {
-      id: 2,
-      title:'durazno',
-      price:5,
-      quantity:6,
-      completed:false,
+  deleteItem(item:Item){
+    this.items=this.items.filter(x=>x.id!=item.id);
+    this.getTotal();
+  }
 
-    },
-  ]
-}
+  toggleItem(item:Item){
+    this.getTotal();
+  }
 
-deleteItem(item:Item){
-  
-  this.items=this.items.filter(x=>x.id!=item.id);
-}
+  getTotal(){
+    this.total=this.items
+              .filter(Item=>!Item.completed)
+              .map(item=>item.quantity*item.price)
+              .reduce((acc,item)=>acc+=item,0);
+
+  }
 
 }
